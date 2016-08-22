@@ -3,10 +3,13 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.Results;
+using System.Web.Http.Routing;
 using UnitTestingWebAPI.Core.Controllers;
 using UnitTestingWebAPI.Data;
 using UnitTestingWebAPI.Data.Infrastructure;
@@ -117,6 +120,101 @@ namespace UnitTestingWebAPI.Tests
             };
             var badResult = articleController.PutArticle(new Article() { ID = -1, Title = "Unknow Article" });
             Assert.That(badResult, Is.TypeOf<BadRequestResult>());
+        }
+        [Test]
+        public void ControllerShouldPutUpdateFirstArticle()
+        {
+            var articleController = new ArticlesController(_articleService)
+            {
+                Configuration = new System.Web.Http.HttpConfiguration(),
+                Request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri("http://localhost/api/articles/1")
+                }
+            };
+            var updateResult = articleController.PutArticle(new Article()
+            {
+                ID = 1,
+                Title = "Update Article Title 1",
+                URL = "http://www.gosugamers.net/dota2",
+                Contents = "Update Contents."
+            }) as IHttpActionResult;
+
+            Assert.That(updateResult, Is.TypeOf<StatusCodeResult>());
+            StatusCodeResult statusCodeResult = updateResult as StatusCodeResult;
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(_randomArticles.First().URL, Is.EqualTo("http://www.gosugamers.net/dota2"));
+        }
+        [Test]
+        public void ControllerShouldPostNewArticle()
+        {
+            var newArticle = new Article
+            {
+                Title = "Bootstrap 3 Tutorial",
+                URL = "http://www.w3schools.com/bootstrap/default.asp",
+                Author = "w3schools",
+                DateCreated = DateTime.Now,
+                Contents = "This Bootstrap tutorial contains hundreds of Bootstrap examples"
+            };
+            var articleController = new ArticlesController(_articleService)
+            {
+                Configuration = new HttpConfiguration(),
+                Request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("http://localhost/api/articles")
+                }
+            };
+            articleController.Configuration.MapHttpAttributeRoutes();
+            articleController.Configuration.EnsureInitialized();
+            articleController.RequestContext.RouteData = new HttpRouteData(
+                new HttpRoute(),
+                new HttpRouteValueDictionary
+                {
+                    { "articleController", "Articles" }
+                }
+            );
+            var result = articleController.PostArticle(newArticle) as CreatedAtRouteNegotiatedContentResult<Article>;
+
+            Assert.That(result.RouteName, Is.EqualTo("DefaultApi"));
+            Assert.That(result.Content.ID, Is.EqualTo(result.RouteValues["id"]));
+            Assert.That(result.Content.ID, Is.EqualTo(_randomArticles.Max(a => a.ID)));
+        }
+        [Test]
+        public void ControllerShouldNotPostNewArticle()
+        {
+            var newArticle = new Article
+            {
+                Title = "Bootstrap 3 Tutorial",
+                URL = "http://www.w3schools.com/bootstrap/default.asp",
+                Author = "w3schools",
+                DateCreated = DateTime.Now,
+                Contents = null
+            };
+            var articleController = new ArticlesController(_articleService)
+            {
+                Configuration = new HttpConfiguration(),
+                Request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("http://localhost/api/articles")
+                }
+            };
+            articleController.Configuration.MapHttpAttributeRoutes();
+            articleController.Configuration.EnsureInitialized();
+            articleController.RequestContext.RouteData = new HttpRouteData(
+                new HttpRoute(),
+                new HttpRouteValueDictionary
+                {
+                    { "Controller", "Articles" }
+                }
+            );
+            articleController.ModelState.AddModelError("Contents", "Content is required field");
+            var result = articleController.PostArticle(newArticle) as InvalidModelStateResult;
+
+            Assert.That(result.ModelState.Count, Is.EqualTo(1));
+            Assert.That(result.ModelState.IsValid, Is.EqualTo(false));
         }
         #endregion
     }

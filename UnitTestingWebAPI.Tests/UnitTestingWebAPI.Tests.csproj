@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllerTest.cs" />
+    <Compile Include="Hosting\Startup.cs" />
+    <Compile Include="MessageHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTest.cs" />
   </ItemGroup>
