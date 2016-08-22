@@ -54,7 +54,7 @@ namespace UnitTestingWebAPI.Data
                 new Article()
                 {
                     Author = "TechFunda.com",
-                    Title = "SQL Server > Table ",
+                    Title = "SQL Server > Table",
                     Contents = "Table is an object in the database that actually holds the data into the database. Data is stored in the form of rows and columns into the database.",
                     URL = "http://techfunda.com/howto/sql-server/table"
                 }
