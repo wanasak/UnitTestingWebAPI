@@ -12,7 +12,7 @@ namespace UnitTestingWebAPI.Data
     {
         protected override void Seed(AppEntities context)
         {
-
+            GetBlogs().ForEach(b => context.Blogs.Add(b));
             context.Commit();
         }
 
@@ -25,14 +25,16 @@ namespace UnitTestingWebAPI.Data
                     Name = "TechFunda",
                     URL = "http://techfunda.com/",
                     Owner = "Robert Edward",
-                    Articles = GetTechFundaArticles()
+                    Articles = GetTechFundaArticles(),
+                    DateCreated = DateTime.Now.AddDays(-7)
                 },
                 new Blog()
                 {
                     Name = "Dotnet awesome",
                     URL = "http://www.dotnetawesome.com/",
                     Owner = "Alan Smith",
-                    Articles = GetDotnetAwesomeArticles()
+                    Articles = GetDotnetAwesomeArticles(),
+                    DateCreated = DateTime.Now
                 }
             };
             return _blogs;

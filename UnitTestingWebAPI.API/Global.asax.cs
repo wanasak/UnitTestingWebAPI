@@ -9,7 +9,7 @@ using UnitTestingWebAPI.Data;
 
 namespace UnitTestingWebAPI.API
 {
-    public class Global1 : System.Web.HttpApplication
+    public class Global : System.Web.HttpApplication
     {
 
         protected void Application_Start(object sender, EventArgs e)

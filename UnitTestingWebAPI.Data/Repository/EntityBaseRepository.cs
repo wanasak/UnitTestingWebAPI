@@ -23,35 +23,36 @@ namespace UnitTestingWebAPI.Data.Repository
         protected AppEntities DbContext
         {
             get { return dbContext ?? (dbContext = DbFactory.Init()); }
-        }
+        }   
 
         protected EntityBaseRepository(IDbFactory dbFactory)
         {
-            DbFactory = DbFactory;
+            DbFactory = dbFactory;
+            dbContext = DbContext;
         }
 
         public virtual void Add(T entity)
         {
-            DbContext.Set<T>().Add(entity);
+            dbContext.Set<T>().Add(entity);
         }
 
         public virtual void Edit(T entity)
         {
-            DbEntityEntry entry = DbContext.Entry<T>(entity);
+            DbEntityEntry entry = dbContext.Entry<T>(entity);
             entry.State = EntityState.Modified;
         }
 
         public virtual void Delete(T entity)
         {
-            DbEntityEntry entry = DbContext.Entry<T>(entity);
+            DbEntityEntry entry = dbContext.Entry<T>(entity);
             entry.State = EntityState.Deleted;
         }
 
         public virtual void Delete(Expression<Func<T, bool>> predict)
         {
-            IQueryable<T> entities = DbContext.Set<T>().Where(predict);
+            IQueryable<T> entities = dbContext.Set<T>().Where(predict);
             foreach (T entity in entities)
-                DbContext.Set<T>().Remove(entity);
+                dbContext.Set<T>().Remove(entity);
         }
 
         public virtual T GetSingle(int id)

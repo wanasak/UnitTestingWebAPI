@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Integration.WebApi;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ using System.Web.Http.Dispatcher;
 using UnitTestingWebAPI.Core;
 using UnitTestingWebAPI.Core.Controllers;
 using UnitTestingWebAPI.Core.MediaTypeFormatter;
+using UnitTestingWebAPI.Data.Infrastructure;
+using UnitTestingWebAPI.Data.Repository;
+using UnitTestingWebAPI.Service;
 
 namespace UnitTestingWebAPI.API
 {
@@ -30,7 +34,25 @@ namespace UnitTestingWebAPI.API
 
             // Autofac configuration
             var builder = new ContainerBuilder();
-            //builder.RegisterApiControllers(typeof(BlogController).Assembly);
+            // Register API Controller in different project
+            builder.RegisterApiControllers(typeof(BlogsController).Assembly);
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+            builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
+
+            // Repositories
+            builder.RegisterAssemblyTypes(typeof(BlogRepository).Assembly)
+                .Where(t => t.Name.EndsWith("Repository"))
+                .AsImplementedInterfaces().InstancePerRequest();
+
+            // Serrvices
+            builder.RegisterAssemblyTypes(typeof(ArticleService).Assembly)
+                .Where(t => t.Name.EndsWith("Service"))
+                .AsImplementedInterfaces().InstancePerRequest();
+
+            IContainer container = builder.Build();
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            appBuilder.UseWebApi(config);
         }
     }
 }

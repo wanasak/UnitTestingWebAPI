@@ -15,7 +15,7 @@ namespace UnitTestingWebAPI.Core
         public override ICollection<Assembly> GetAssemblies()
         {
             var baseAssemblies = base.GetAssemblies().ToList();
-            var assemblies = new List<Assembly>(baseAssemblies) { typeof(BlogController).Assembly };
+            var assemblies = new List<Assembly>(baseAssemblies) { typeof(BlogsController).Assembly };
             baseAssemblies.AddRange(assemblies);
             return baseAssemblies.Distinct().ToList();
         }

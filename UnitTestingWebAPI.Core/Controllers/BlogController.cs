@@ -11,11 +11,11 @@ using UnitTestingWebAPI.Service;
 
 namespace UnitTestingWebAPI.Core.Controllers
 {
-    public class BlogController : ApiController
+    public class BlogsController : ApiController
     {
         private IBlogService _blogService;
 
-        public BlogController(IBlogService blogService)
+        public BlogsController(IBlogService blogService)
         {
             _blogService = blogService;
         }
