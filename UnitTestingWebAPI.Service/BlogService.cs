@@ -9,7 +9,7 @@ using UnitTestingWebAPI.Entity;
 
 namespace UnitTestingWebAPI.Service
 {
-    public interface IBlogServie
+    public interface IBlogService
     {
         IQueryable<Blog> GetBlogs(string name = null);
         Blog GetBlog(int id);
@@ -20,7 +20,7 @@ namespace UnitTestingWebAPI.Service
         void SaveBlog();
     }
 
-    public class BlogService : IBlogServie
+    public class BlogService : IBlogService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBlogRepository _blogRepository;
