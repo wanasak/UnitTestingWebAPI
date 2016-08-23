@@ -32,18 +32,19 @@ namespace UnitTestingWebAPI.Tests
         }
 
         [Test]
-        public async void ShouldAppendCustomHeader()
+        public void ShouldAppendCustomHeader()
         {
             var invoker = new HttpMessageInvoker(_headerAppenderHandler);
-            var result = await invoker.SendAsync(
+            Task<HttpResponseMessage> result = invoker.SendAsync(
                 new HttpRequestMessage(
                     HttpMethod.Get,
                     new Uri("http://localhost/api/test/")),
                 CancellationToken.None
             );
+            result.Wait();
 
-            Assert.That(result.Headers.Contains("X-WebAPI-Header"), Is.True);
-            Assert.That(result.Content.ReadAsStringAsync().Result, Is.EqualTo("Unit testing message handlers!"));
+            Assert.That(result.Result.Headers.Contains("X-WebAPI-Header"), Is.True);
+            Assert.That(result.Result.Content.ReadAsStringAsync().Result, Is.EqualTo("Unit testing message handlers!"));
         }
         [Test]
         public void ShouldCallToControllerActionAppendCustomHeader()

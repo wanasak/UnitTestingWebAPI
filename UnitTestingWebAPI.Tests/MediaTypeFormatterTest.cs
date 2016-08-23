@@ -45,14 +45,15 @@ namespace UnitTestingWebAPI.Tests
             Assert.That(content.Headers.ContentType.MediaType, Is.EqualTo("application/article"));
         }
         [Test]
-        public async void FormatterShouldBeAbleToDeserializeArticle()
+        public void FormatterShouldBeAbleToDeserializeArticle()
         {
             var content = new ObjectContent<Article>(_article, _formatter);
-            var deserializedArticle = await content.ReadAsAsync<Article>(
+            Task<Article> deserializedArticle = content.ReadAsAsync<Article>(
                 new[] { _formatter } 
                 );
+            deserializedArticle.Wait();
 
-            Assert.That(_article, Is.SameAs(deserializedArticle));
+            Assert.That(_article, Is.SameAs(deserializedArticle.Result));
         }
         [Test]
         public void FormatterShouldNotBeAbleToWriteUnsupportedType()
