@@ -45,7 +45,7 @@ namespace UnitTestingWebAPI.Tests
         }
         public IArticleRepository SetupArticleRepository()
         {
-            // Inti repository
+            // Init repository
             var repo = new Mock<IArticleRepository>();
 
             // Setup mocking behavior

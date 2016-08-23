@@ -30,6 +30,7 @@ namespace UnitTestingWebAPI.Tests
         #endregion
 
         #region Setup
+        [SetUp]
         public void Setup()
         {
             _randomArticles = SetupArticles();

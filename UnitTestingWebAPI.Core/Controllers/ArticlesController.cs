@@ -44,6 +44,9 @@ namespace UnitTestingWebAPI.Core.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (article.ID < 0)
+                return BadRequest();
+
             _articleService.UpdateArticle(article);
 
             try
