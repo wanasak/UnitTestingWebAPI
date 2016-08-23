@@ -65,12 +65,12 @@ namespace UnitTestingWebAPI.Data.Repository
             return dbContext.Set<T>().Where(predict).FirstOrDefault();
         }
 
-        public virtual IQueryable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return dbContext.Set<T>();
         }
 
-        public virtual IQueryable<T> GetMany(Expression<Func<T, bool>> predict)
+        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> predict)
         {
             return dbContext.Set<T>().Where(predict);
         }

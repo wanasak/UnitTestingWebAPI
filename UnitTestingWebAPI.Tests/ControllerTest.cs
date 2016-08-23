@@ -54,7 +54,7 @@ namespace UnitTestingWebAPI.Tests
             var repo = new Mock<IArticleRepository>();
 
             // Setup mocking behavior
-            repo.Setup(r => r.GetAll().ToList()).Returns(_randomArticles);
+            repo.Setup(r => r.GetAll()).Returns(_randomArticles);
             repo.Setup(r => r.GetSingle(It.IsAny<int>()))
                 .Returns(new Func<int, Article>(id =>
                     _randomArticles.Find(a => a.ID.Equals(id))));

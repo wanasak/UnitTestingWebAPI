@@ -11,7 +11,7 @@ namespace UnitTestingWebAPI.Service
 {
     public interface IBlogService
     {
-        IQueryable<Blog> GetBlogs(string name = null);
+        IEnumerable<Blog> GetBlogs(string name = null);
         Blog GetBlog(int id);
         Blog GetBlog(string name);
         void CreateBlog(Blog blog);
@@ -31,7 +31,7 @@ namespace UnitTestingWebAPI.Service
             _blogRepository = blogRepository;
         }
 
-        public IQueryable<Blog> GetBlogs(string name = null)
+        public IEnumerable<Blog> GetBlogs(string name = null)
         {
             if (string.IsNullOrEmpty(name))
                 return _blogRepository.GetAll();

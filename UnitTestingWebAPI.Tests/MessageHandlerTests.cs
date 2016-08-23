@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Owin.Hosting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnitTestingWebAPI.Core.MessageHandlers;
+using UnitTestingWebAPI.Data;
+using UnitTestingWebAPI.Entity;
+using UnitTestingWebAPI.Tests.Hosting;
 
 namespace UnitTestingWebAPI.Tests
 {
@@ -40,6 +44,22 @@ namespace UnitTestingWebAPI.Tests
 
             Assert.That(result.Headers.Contains("X-WebAPI-Header"), Is.True);
             Assert.That(result.Content.ReadAsStringAsync().Result, Is.EqualTo("Unit testing message handlers!"));
+        }
+        [Test]
+        public void ShouldCallToControllerActionAppendCustomHeader()
+        {
+            var address = "http://localhost:9000/";
+
+            using (WebApp.Start<Startup>(address))
+            {
+                HttpClient _client = new HttpClient();
+                var response = _client.GetAsync(address + "api/articles").Result;
+
+                Assert.That(response.Headers.Contains("X-WebAPI-Header"), Is.True);
+
+                var _returnArticles = response.Content.ReadAsAsync<List<Article>>().Result;
+                Assert.That(_returnArticles.Count, Is.EqualTo(AppInitializer.GetAllArticles().Count));
+            }
         }
     }
 }

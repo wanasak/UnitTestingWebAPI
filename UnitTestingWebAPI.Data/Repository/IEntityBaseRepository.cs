@@ -17,7 +17,7 @@ namespace UnitTestingWebAPI.Data.Repository
         T GetSingle(int id);
         T Get(Expression<Func<T, bool>> predict);
 
-        IQueryable<T> GetAll();
-        IQueryable<T> GetMany(Expression<Func<T, bool>> predict);
+        IEnumerable<T> GetAll();
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> predict);
     }
 }

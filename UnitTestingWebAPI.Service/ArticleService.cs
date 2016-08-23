@@ -11,7 +11,7 @@ namespace UnitTestingWebAPI.Service
 {
     public interface IArticleService
     {
-        IQueryable<Article> GetArticles(string title = null);
+        IEnumerable<Article> GetArticles(string title = null);
         Article GetArticle(int id);
         Article GetArticle(string title);
         void CreateArticle(Article article);
@@ -32,7 +32,7 @@ namespace UnitTestingWebAPI.Service
             _unitOfWOrk = unitOfWork;
         }
 
-        public IQueryable<Article> GetArticles(string title = null)
+        public IEnumerable<Article> GetArticles(string title = null)
         {
             if (string.IsNullOrEmpty(title))
                 return _articleRepository.GetAll();
