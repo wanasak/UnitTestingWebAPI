@@ -118,7 +118,7 @@ namespace UnitTestingWebAPI.Tests
         {
             var firstArticle = _randomArticles.First();
             firstArticle.Title = "Update Title";
-            _articleRepository.Edit(firstArticle);
+            _articleService.UpdateArticle(firstArticle);
 
             Assert.That(firstArticle.DateEdited, Is.Not.EqualTo(DateTime.MinValue));
             Assert.That(firstArticle.ID, Is.EqualTo(1));
